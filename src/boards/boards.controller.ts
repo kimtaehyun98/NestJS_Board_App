@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Board, BoardStatus } from './board.model';
+import { Board } from '@prisma/client';
+import { BoardStatus } from './board-status.enum';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 
@@ -8,33 +9,48 @@ export class BoardsController {
 
   constructor (private boardsService : BoardsService) {}
 
-  @Get('/')
-  getAllBoard(): Board[] {
-    return this.boardsService.getAllBoards();
+  // prisma(PostgreSQL) 사용한 코드
+  @Get('/:id')
+  getBoardById(@Param("id") id: number): Promise<Board> {
+    return this.boardsService.getBoardById(id);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  createBoard(
-    @Body() createBoardDto: CreateBoardDto) {
-      return this.boardsService.createBoard(createBoardDto);
+  createBoard(@Body() createBoardDto: CreateBoardDto) {
+    return this.boardsService.createBoard(createBoardDto);
   }
 
-  @Get('/:id')
-  getBoardById(@Param('id') id: string): Board {
-    return this.boardsService.getBoardById(id);
-  }
 
-  @Delete('/:id')
-  deleteBoard(@Param('id') id: string): void {
-    this.boardsService.deleteBoard(id);
-  }
+  // 아래 부분은 Local Memory 사용한 코드들
 
-  @Patch('/:id/status')
-  updateBoardStatus(
-    @Param('id') id: string,
-    @Body('status') status: BoardStatus,
-  ) {
-    return this.boardsService.updateBoardStatus(id, status);
-  }
+  // @Get('/')
+  // getAllBoard(): Board[] {
+  //   return this.boardsService.getAllBoards();
+  // }
+
+  // @Post()
+  // @UsePipes(ValidationPipe)
+  // createBoard(
+  //   @Body() createBoardDto: CreateBoardDto) {
+  //     return this.boardsService.createBoard(createBoardDto);
+  // }
+
+  // @Get('/:id')
+  // getBoardById(@Param('id') id: string): Board {
+  //   return this.boardsService.getBoardById(id);
+  // }
+
+  // @Delete('/:id')
+  // deleteBoard(@Param('id') id: string): void {
+  //   this.boardsService.deleteBoard(id);
+  // }
+
+  // @Patch('/:id/status')
+  // updateBoardStatus(
+  //   @Param('id') id: string,
+  //   @Body('status') status: BoardStatus,
+  // ) {
+  //   return this.boardsService.updateBoardStatus(id, status);
+  // }
 }

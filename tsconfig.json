@@ -16,6 +16,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "strict": true, // 요 아래부터 prisma 설정
+    "lib": ["esnext"],
+    "esModuleInterop": true
   }
 }
